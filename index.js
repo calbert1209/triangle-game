@@ -45,6 +45,8 @@ function updateSwatchCounts() {
   document.getElementById("redCount").textContent = redCount;
   const blueCount = countColoredTriangles("blue");
   document.getElementById("blueCount").textContent = blueCount;
+  const greenCount = countColoredTriangles("green");
+  document.getElementById("greenCount").textContent = greenCount;
 }
 
 const colorBtn = document.getElementById("colorBtn");
