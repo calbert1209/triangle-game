@@ -1,4 +1,4 @@
-const colors = ["white", "red", "blue"];
+const colors = ["white", "red", "blue", "green"];
 let currentColorIndex = 0;
 
 const swatch = document.getElementById("swatch");
