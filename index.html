@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="./index.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="row">
+      <button id="colorBtn">
+        <div id="swatch"></div>
+      </button>
+      <div id="redCount">0</div>
+      <div id="blueCount">0</div>
+    </div>
+    <svg id="svgBox" viewBox="0 0 1400 800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path id="triangle" d="M31 79 L79 79 L55 37.6 Z" />
+        <path id="triangle-down" d="M31 37.6 L79 37.6 L55 79 Z" />
+      </defs>
+      <rect width="1300" height="800" fill="gray" />
+    </svg>
+    <script src="./index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+# Node modules
+node_modules/
+
+# Mac system files
+.DS_Store
+
+# Logs
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code settings
+.vscode/
+
+# Environment files
+.env
+
+# Build output
+dist/
+build/
+
+# OS junk files
+Thumbs.db
+
+# Misc
+*.swp
