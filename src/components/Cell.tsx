@@ -1,6 +1,14 @@
-import { Triangle } from "../models/Triangle";
+import { Triangle, TriangleId } from "../models/Triangle";
 
-export const Cell = ({ triangle }: { triangle: Triangle }) => {
+export const Cell = ({
+  triangle,
+  fill,
+  onClick,
+}: {
+  triangle: Triangle;
+  fill: string;
+  onClick: (id: TriangleId) => void;
+}) => {
   const href = triangle.direction === "up" ? "#triangle" : "#triangle-down";
   return (
     <use
@@ -8,14 +16,9 @@ export const Cell = ({ triangle }: { triangle: Triangle }) => {
       href={href}
       x={triangle.col * 25 - 25}
       y={triangle.row * 42 - 30}
+      fill={fill}
       data-selected="false"
-      onClick={() =>
-        console.log(
-          `Clicked on ${triangle.id}, neighbors: ${triangle.neighborIds.join(
-            ", "
-          )}`
-        )
-      }
+      onClick={() => onClick(triangle.id)}
     />
   );
 };

@@ -1,5 +1,5 @@
 import { render } from "preact";
-import { App } from "./components/App";
 import "./style.css";
+import { TriangleGameApp } from "./models/Game";
 
-render(<App />, document.getElementById("app"));
+render(<TriangleGameApp />, document.getElementById("app"));

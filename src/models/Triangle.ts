@@ -29,31 +29,3 @@ export const createTriangle = (
 
   return { row, col, direction, id, neighborIds };
 }
-
-// export class Triangle {
-//   constructor(
-//     public row: number,
-//     public col: number,
-//     public direction: "up" | "down"
-//   ) { }
-
-//   get id(): TriangleId {
-//     return `t-${this.row}-${this.col}`;
-//   }
-
-//   neighborIds(): TriangleId[] {
-//     if (this.direction === "down") {
-//       return [
-//         `t-${this.row - 1}-${this.col}`,
-//         `t-${this.row}-${this.col - 1}`,
-//         `t-${this.row}-${this.col + 1}`,
-//       ];
-//     } else {
-//       return [
-//         `t-${this.row + 1}-${this.col}`,
-//         `t-${this.row}-${this.col - 1}`,
-//         `t-${this.row}-${this.col + 1}`,
-//       ];
-//     }
-//   }
-// }
