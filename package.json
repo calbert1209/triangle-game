@@ -7,6 +7,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"boardgame.io": "^0.50.2",
 		"preact": "^10.26.9"
 	},
 	"devDependencies": {
