@@ -12,3 +12,47 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#swatch {
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.count {
+  user-select: none;
+}
+
+#redCount,
+#blueCount,
+#greenCount {
+  font-size: 16px;
+  width: 48px;
+  height: 32px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#redCount {
+  background-color: red;
+}
+#blueCount {
+  background-color: blue;
+}
+#greenCount {
+  background-color: green;
+}
+
+use {
+  cursor: pointer;
+  fill: white;
+} /* Add your styles here */
