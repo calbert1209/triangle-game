@@ -14,9 +14,11 @@ export const Cell = ({
     <use
       key={triangle.id}
       href={href}
-      x={triangle.col * 25 - 25}
-      y={triangle.row * 42 - 30}
+      x={triangle.col * 25 - 15}
+      y={triangle.row * 42 - 10}
       fill={fill}
+      stroke="#95A5A6"
+      strokeWidth="0.5"
       data-selected="false"
       onClick={() => onClick(triangle.id)}
     />

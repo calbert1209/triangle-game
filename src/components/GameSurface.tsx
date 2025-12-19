@@ -4,8 +4,8 @@ import { createTriangle } from "../models/Triangle";
 import { GameBoard } from "./GameBoard";
 import { GameHeader } from "./Header";
 
-const triangles = Array.from({ length: 18 }).flatMap((_, row) =>
-  Array.from({ length: 42 }).map((_, col) => {
+const triangles = Array.from({ length: 15 }).flatMap((_, row) =>
+  Array.from({ length: 54 }).map((_, col) => {
     const direction = (col + row) % 2 === 0 ? "up" : "down";
     return createTriangle(row, col, direction);
   })
