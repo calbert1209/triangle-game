@@ -1,28 +1,41 @@
-# Node modules
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
 node_modules/
+
+# Build output
+dist/
+dist-ssr
+build/
+*.local
 
 # Mac system files
 .DS_Store
 
-# Logs
-*.log
+# OS junk files
+Thumbs.db
 
 # Python cache
 __pycache__/
 *.pyc
 
-# VS Code settings
-.vscode/
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
 
 # Environment files
 .env
-
-# Build output
-dist/
-build/
-
-# OS junk files
-Thumbs.db
-
-# Misc
-*.swp
