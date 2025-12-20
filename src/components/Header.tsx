@@ -3,8 +3,8 @@ export const GameHeader = () => (
     <button id="colorBtn">
       <div id="swatch"></div>
     </button>
-    <div id="redCount">0</div>
-    <div id="blueCount">0</div>
-    <div id="greenCount">0</div>
+    <div id="redCount">999</div>
+    <div id="blueCount">999</div>
+    <div id="greenCount">999</div>
   </div>
 );
