@@ -6,6 +6,8 @@ import { INVALID_MOVE } from "boardgame.io/core";
 
 export interface TriangleGameState {
   capturedCells: Record<TriangleId, string>;
+  tries: number;
+  stagedCells: TriangleId[];
 }
 
 const captureCell: MoveFn<TriangleGameState> = ({ G, ctx }, triangleId: TriangleId) => {
@@ -17,8 +19,13 @@ const captureCell: MoveFn<TriangleGameState> = ({ G, ctx }, triangleId: Triangle
   G.capturedCells[triangleId] = playerColor;
 }
 
+
+const rollDice: MoveFn<TriangleGameState> = ({ G, ctx }) => {
+  // Implement dice rolling logic here
+}
+
 export const TriangleGame: Game<TriangleGameState> = {
-  setup: (): TriangleGameState => ({ capturedCells: {} }),
+  setup: (): TriangleGameState => ({ capturedCells: {}, tries: 0, stagedCells: [] }),
 
   moves: {
     captureCell,
@@ -27,6 +34,18 @@ export const TriangleGame: Game<TriangleGameState> = {
   turn: {
     minMoves: 1,
     maxMoves: 1,
+    stages: {
+      capture: {
+        moves: {
+          captureCell,
+        },
+      },
+      roll: {
+        moves: {
+          rollDice,
+        },
+      }
+    }
   }
 }
 
