@@ -1,24 +1,25 @@
 import { mapCellPotentials } from ".";
 import { TriangleGameState } from "../Game";
 
+const playerColor = "red";
 const capturedCells: TriangleGameState["capturedCells"] = {
-  "t-1-23": "red",
-  "t-2-17": "red",
-  "t-2-19": "red",
-  "t-2-21": "red",
-  "t-2-24": "red",
-  "t-3-17": "red",
-  "t-3-19": "red",
-  "t-3-21": "red",
-  "t-3-24": "red",
-  "t-4-24": "red",
-  "t-5-22": "red",
-  "t-5-20": "red",
-  "t-6-21": "red",
+  "t-1-23": playerColor,
+  "t-2-17": playerColor,
+  "t-2-19": playerColor,
+  "t-2-21": playerColor,
+  "t-2-24": playerColor,
+  "t-3-17": playerColor,
+  "t-3-19": playerColor,
+  "t-3-21": playerColor,
+  "t-3-24": playerColor,
+  "t-4-24": playerColor,
+  "t-5-22": playerColor,
+  "t-5-20": playerColor,
+  "t-6-21": playerColor,
 };
 
 describe(`${mapCellPotentials.name}`, () => {
-  const potentials = mapCellPotentials(capturedCells, "red");
+  const potentials = mapCellPotentials(capturedCells, playerColor);
   expect(potentials).toHaveProperty("t-2-18", 2);
   const potentialCounts = Object.values(potentials).reduce(
     (acc, potential) => {
