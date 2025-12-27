@@ -13,11 +13,8 @@ export interface Triangle {
   neighborIds: TriangleId[];
 }
 
-export const createTriangle = (
-  row: number,
-  col: number,
-  direction: "up" | "down"
-): Triangle => {
+export const createTriangle = (row: number, col: number): Triangle => {
+  const direction = (col + row) % 2 === 0 ? "up" : "down";
   const id: TriangleId = `t-${row}-${col}`;
 
   const neighborIds: TriangleId[] =
@@ -26,4 +23,9 @@ export const createTriangle = (
       : [`t-${row + 1}-${col}`, `t-${row}-${col - 1}`, `t-${row}-${col + 1}`];
 
   return { row, col, direction, id, neighborIds };
+};
+
+export const createTriangleFromId = (id: TriangleId): Triangle => {
+  const [row, col] = getRowColFromId(id);
+  return createTriangle(row, col);
 };
