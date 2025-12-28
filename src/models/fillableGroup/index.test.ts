@@ -1,5 +1,6 @@
-import { mapCellPotentials } from ".";
+import { findFillableGroup, mapCellPotentials } from ".";
 import { TriangleGameState } from "../Game";
+import { TriangleId } from "../Triangle";
 
 const playerColor = "red";
 const capturedCells: TriangleGameState["capturedCells"] = {
@@ -57,5 +58,19 @@ describe(`${mapCellPotentials.name}`, () => {
     it.each(cases)("$cellId -> $expected", ({ cellId, expected }) => {
       expect(potentials).toHaveProperty(cellId, expected);
     });
+  });
+});
+
+describe(`${findFillableGroup.name}`, () => {
+  const fillableGroup = findFillableGroup(capturedCells, playerColor);
+  it("should have correct size", () => {
+    expect(fillableGroup.length).toBe(5);
+  });
+  it("should contain specific cells", () => {
+    const expectedCells = ["t-2-18", "t-2-20", "t-3-18", "t-3-20", "t-5-21"];
+
+    for (const cellId of expectedCells) {
+      expect(fillableGroup).toContain(cellId);
+    }
   });
 });
