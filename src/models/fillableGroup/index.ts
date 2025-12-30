@@ -5,18 +5,19 @@ import { createTriangleFromId, TriangleId } from "../Triangle";
 const getCellPotential = (
   [c, r]: [number, number],
   capturedCells: TriangleGameState["capturedCells"],
-  playerColor: "red" | "blue"
+  playerId: number
 ): number => {
   const cellId: TriangleId = `t-${c}-${r}`;
-  if (capturedCells[cellId]) {
-    return capturedCells[cellId] === playerColor ? 4 : 0;
+  const owner = capturedCells[cellId];
+  if (owner !== undefined) {
+    return owner === playerId ? 4 : 0;
   }
 
   const triangle = createTriangleFromId(cellId);
   let potential = 0;
 
   for (const neighborId of triangle.neighborIds) {
-    if (capturedCells[neighborId] === playerColor) {
+    if (capturedCells[neighborId] === playerId) {
       potential += 1;
     }
   }
@@ -34,12 +35,12 @@ const iterateThroughBoardCells = (cb: (r: number, c: number) => void) => {
 
 export const mapCellPotentials = (
   capturedCells: TriangleGameState["capturedCells"],
-  playerColor: "red" | "blue"
+  playerId: number
 ) => {
   const potentials: Record<TriangleId, number> = {};
   iterateThroughBoardCells((r, c) => {
     const cellId: TriangleId = `t-${r}-${c}`;
-    potentials[cellId] = getCellPotential([r, c], capturedCells, playerColor);
+    potentials[cellId] = getCellPotential([r, c], capturedCells, playerId);
   });
 
   return potentials;
@@ -82,9 +83,9 @@ export const checkAllAdjacentCells = (
 
 export const findFillableGroup = (
   capturedCells: TriangleGameState["capturedCells"],
-  playerColor: "red" | "blue"
+  playerId: number
 ): TriangleId[] => {
-  const potentials = mapCellPotentials(capturedCells, playerColor);
+  const potentials = mapCellPotentials(capturedCells, playerId);
   const output = new Set<TriangleId>();
   const notFillable = new Set<TriangleId>();
   for (const cellId of Object.keys(potentials) as TriangleId[]) {

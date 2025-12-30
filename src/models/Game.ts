@@ -5,7 +5,7 @@ import { GameSurface } from "../components/GameSurface";
 import { INVALID_MOVE } from "boardgame.io/core";
 
 export interface TriangleGameState {
-  capturedCells: Record<TriangleId, string>;
+  capturedCells: Record<TriangleId, number>;
   tries: number;
   stagedCells: TriangleId[];
 }
@@ -20,7 +20,7 @@ const pickCell: MoveFn<TriangleGameState> = ({ G }, id: TriangleId) => {
     return INVALID_MOVE;
   }
 
-  if (G.capturedCells[id]) {
+  if (G.capturedCells[id] !== undefined) {
     return INVALID_MOVE;
   }
 
@@ -32,10 +32,10 @@ const revertPickCells: MoveFn<TriangleGameState> = ({ G }) => {
 };
 
 const captureCells: MoveFn<TriangleGameState> = ({ G, ctx, events }) => {
-  const playerColor = ctx.currentPlayer === "0" ? "red" : "blue";
+  const playerId = parseInt(ctx.currentPlayer, 10);
   while (G.stagedCells.length > 0) {
     const stagedTriangleId = G.stagedCells.pop()!;
-    G.capturedCells[stagedTriangleId] = playerColor;
+    G.capturedCells[stagedTriangleId] = playerId;
   }
 
   events.endTurn();

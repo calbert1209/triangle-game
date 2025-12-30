@@ -2,7 +2,7 @@ import { Triangle } from "../models/Triangle";
 import { Cell } from "./Cell";
 import { BoardProps } from "boardgame.io/dist/types/packages/react";
 import { TriangleGameState } from "../models/Game";
-import { getCellColorHex, getColorHex } from "../models/colors";
+import { getCellColorHex } from "../models/colors";
 
 interface Props extends BoardProps<TriangleGameState> {
   triangles: Array<Triangle>;

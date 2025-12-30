@@ -12,25 +12,23 @@ export const COLOR_MAP: Record<string, string> = {
   white: "white",
 };
 
-export const getColorHex = (colorName: string): string => {
-  return COLOR_MAP[colorName] || colorName;
-};
-
 export const getCellColorHex = (
   G: TriangleGameState,
   ctx: Ctx,
   id: TriangleId
 ) => {
-  if (G.capturedCells[id]) {
-    return getColorHex(G.capturedCells[id]);
+  const playerColors = ["red", "blue", "green"] as const;
+  const owner = G.capturedCells[id];
+  if (owner !== undefined) {
+    return COLOR_MAP[playerColors[owner]];
   }
 
-  const color = ["pickedRed", "pickedBlue", "pickedGreen"][
-    parseInt(ctx.currentPlayer, 10)
-  ];
+  const pickedColors = ["pickedRed", "pickedBlue", "pickedGreen"] as const;
+  const currentPlayerIndex = parseInt(ctx.currentPlayer, 10);
+  const stagedColor = pickedColors[currentPlayerIndex];
   if (G.stagedCells.includes(id)) {
-    return getColorHex(color);
+    return COLOR_MAP[stagedColor];
   }
 
-  return getColorHex("white");
+  return COLOR_MAP["white"];
 };

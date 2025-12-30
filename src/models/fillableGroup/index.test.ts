@@ -2,25 +2,25 @@ import { findFillableGroup, mapCellPotentials } from ".";
 import { TriangleGameState } from "../Game";
 import { TriangleId } from "../Triangle";
 
-const playerColor = "red";
+const playerId = 0;
 const capturedCells: TriangleGameState["capturedCells"] = {
-  "t-1-23": playerColor,
-  "t-2-17": playerColor,
-  "t-2-19": playerColor,
-  "t-2-21": playerColor,
-  "t-2-24": playerColor,
-  "t-3-17": playerColor,
-  "t-3-19": playerColor,
-  "t-3-21": playerColor,
-  "t-3-24": playerColor,
-  "t-4-24": playerColor,
-  "t-5-22": playerColor,
-  "t-5-20": playerColor,
-  "t-6-21": playerColor,
+  "t-1-23": playerId,
+  "t-2-17": playerId,
+  "t-2-19": playerId,
+  "t-2-21": playerId,
+  "t-2-24": playerId,
+  "t-3-17": playerId,
+  "t-3-19": playerId,
+  "t-3-21": playerId,
+  "t-3-24": playerId,
+  "t-4-24": playerId,
+  "t-5-22": playerId,
+  "t-5-20": playerId,
+  "t-6-21": playerId,
 };
 
 describe(`${mapCellPotentials.name}`, () => {
-  const potentials = mapCellPotentials(capturedCells, playerColor);
+  const potentials = mapCellPotentials(capturedCells, playerId);
   expect(potentials).toHaveProperty("t-2-18", 2);
   const potentialCounts = Object.values(potentials).reduce(
     (acc, potential) => {
@@ -62,7 +62,7 @@ describe(`${mapCellPotentials.name}`, () => {
 });
 
 describe(`${findFillableGroup.name}`, () => {
-  const fillableGroup = findFillableGroup(capturedCells, playerColor);
+  const fillableGroup = findFillableGroup(capturedCells, playerId);
   it("should have correct size", () => {
     expect(fillableGroup.length).toBe(5);
   });
