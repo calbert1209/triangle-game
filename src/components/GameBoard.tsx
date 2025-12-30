@@ -2,13 +2,13 @@ import { Triangle } from "../models/Triangle";
 import { Cell } from "./Cell";
 import { BoardProps } from "boardgame.io/dist/types/packages/react";
 import { TriangleGameState } from "../models/Game";
-import { getColorHex } from "../models/colors";
+import { getCellColorHex, getColorHex } from "../models/colors";
 
 interface Props extends BoardProps<TriangleGameState> {
   triangles: Array<Triangle>;
 }
 
-export const GameBoard = ({ G, triangles, moves }: Props) => (
+export const GameBoard = ({ G, ctx, triangles, moves }: Props) => (
   <svg
     id="svgBox"
     viewBox="0 0 1400 680"
@@ -27,9 +27,9 @@ export const GameBoard = ({ G, triangles, moves }: Props) => (
     {triangles.map((triangle) => (
       <Cell
         triangle={triangle}
-        fill={getColorHex(G.capturedCells[triangle.id] || "white")}
+        fill={getCellColorHex(G, ctx, triangle.id)}
         onClick={(id) => {
-          moves.captureCell(id);
+          moves.pickCell(id);
         }}
       />
     ))}

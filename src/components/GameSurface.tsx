@@ -13,13 +13,11 @@ const triangles = Array.from({ length: BOARD_ROWS }).flatMap((_, row) =>
   })
 );
 
-interface GameSurfaceProps extends BoardProps<TriangleGameState> {}
-
-export const GameSurface = (props: GameSurfaceProps) => {
+export const GameSurface = (props: BoardProps<TriangleGameState>) => {
   return (
     <div>
       <header>
-        <GameHeader />
+        <GameHeader {...props} />
       </header>
       <main>
         <GameBoard {...props} triangles={triangles} />

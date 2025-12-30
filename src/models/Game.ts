@@ -10,43 +10,71 @@ export interface TriangleGameState {
   stagedCells: TriangleId[];
 }
 
-const captureCell: MoveFn<TriangleGameState> = ({ G, ctx }, triangleId: TriangleId) => {
-  if (G.capturedCells[triangleId]) {
+const rollDice: MoveFn<TriangleGameState> = ({ G, events }) => {
+  G.tries = Math.floor(Math.random() * 6) + 1;
+  events.endStage();
+};
+
+const pickCell: MoveFn<TriangleGameState> = ({ G }, id: TriangleId) => {
+  if (G.stagedCells.length >= G.tries) {
     return INVALID_MOVE;
   }
 
+  if (G.capturedCells[id]) {
+    return INVALID_MOVE;
+  }
+
+  G.stagedCells.push(id);
+};
+
+const revertPickCells: MoveFn<TriangleGameState> = ({ G }) => {
+  G.stagedCells = [];
+};
+
+const captureCells: MoveFn<TriangleGameState> = ({ G, ctx, events }) => {
   const playerColor = ctx.currentPlayer === "0" ? "red" : "blue";
-  G.capturedCells[triangleId] = playerColor;
-}
+  while (G.stagedCells.length > 0) {
+    const stagedTriangleId = G.stagedCells.pop()!;
+    G.capturedCells[stagedTriangleId] = playerColor;
+  }
 
-
-const rollDice: MoveFn<TriangleGameState> = ({ G, ctx }) => {
-  // Implement dice rolling logic here
-}
+  events.endTurn();
+};
 
 export const TriangleGame: Game<TriangleGameState> = {
-  setup: (): TriangleGameState => ({ capturedCells: {}, tries: 0, stagedCells: [] }),
+  setup: ({ events }): TriangleGameState => {
+    // events.setActivePlayers({ currentPlayer: "roll" });
+    return {
+      capturedCells: {},
+      tries: 0,
+      stagedCells: [],
+    };
+  },
 
   moves: {
-    captureCell,
+    rollDice,
+    pickCell,
+    revertPickCells,
+    captureCells,
   },
 
   turn: {
-    minMoves: 1,
-    maxMoves: 1,
+    activePlayers: { currentPlayer: "roll" },
     stages: {
-      capture: {
-        moves: {
-          captureCell,
-        },
-      },
       roll: {
         moves: {
           rollDice,
         },
-      }
-    }
-  }
-}
+        next: "pick",
+      },
+      pick: {
+        moves: { pickCell, captureCells, revertPickCells },
+      },
+    },
+  },
+};
 
-export const TriangleGameApp = Client({ game: TriangleGame, board: GameSurface });
+export const TriangleGameApp = Client({
+  game: TriangleGame,
+  board: GameSurface,
+});
