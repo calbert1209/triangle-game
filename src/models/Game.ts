@@ -3,11 +3,13 @@ import { Client } from "boardgame.io/react";
 import { TriangleId } from "./Triangle";
 import { GameSurface } from "../components/GameSurface";
 import { INVALID_MOVE } from "boardgame.io/core";
+import { findFillableGroup } from "./fillableGroup";
 
 export interface TriangleGameState {
   capturedCells: Record<TriangleId, number>;
   tries: number;
   stagedCells: TriangleId[];
+  fillableGroup: TriangleId[];
 }
 
 const rollDice: MoveFn<TriangleGameState> = ({ G, events }) => {
@@ -15,7 +17,7 @@ const rollDice: MoveFn<TriangleGameState> = ({ G, events }) => {
   events.endStage();
 };
 
-const pickCell: MoveFn<TriangleGameState> = ({ G }, id: TriangleId) => {
+const pickCell: MoveFn<TriangleGameState> = ({ G, ctx }, id: TriangleId) => {
   if (G.stagedCells.length >= G.tries) {
     return INVALID_MOVE;
   }
@@ -24,18 +26,38 @@ const pickCell: MoveFn<TriangleGameState> = ({ G }, id: TriangleId) => {
     return INVALID_MOVE;
   }
 
+  if (G.stagedCells.includes(id)) {
+    return INVALID_MOVE;
+  }
+
+  const playerId = parseInt(ctx.currentPlayer, 10);
   G.stagedCells.push(id);
+  const stagedAsCaptured = Object.fromEntries(
+    G.stagedCells.map((id) => [id, playerId])
+  );
+  G.fillableGroup = [
+    ...findFillableGroup({ ...G.capturedCells, ...stagedAsCaptured }, playerId),
+  ];
 };
 
 const revertPickCells: MoveFn<TriangleGameState> = ({ G }) => {
   G.stagedCells = [];
+  G.fillableGroup = [];
 };
 
 const captureCells: MoveFn<TriangleGameState> = ({ G, ctx, events }) => {
+  if (G.stagedCells.length !== G.tries) {
+    return INVALID_MOVE;
+  }
   const playerId = parseInt(ctx.currentPlayer, 10);
   while (G.stagedCells.length > 0) {
-    const stagedTriangleId = G.stagedCells.pop()!;
+    const stagedTriangleId = G.stagedCells.pop();
     G.capturedCells[stagedTriangleId] = playerId;
+  }
+
+  while (G.fillableGroup.length > 0) {
+    const fillableTriangleId = G.fillableGroup.pop();
+    G.capturedCells[fillableTriangleId] = playerId;
   }
 
   events.endTurn();
@@ -48,6 +70,7 @@ export const TriangleGame: Game<TriangleGameState> = {
       capturedCells: {},
       tries: 0,
       stagedCells: [],
+      fillableGroup: [],
     };
   },
 
