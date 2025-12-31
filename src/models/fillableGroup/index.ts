@@ -1,4 +1,4 @@
-import { BOARD_COLS, BOARD_ROWS } from "../../components/GameSurface";
+import { BOARD_COLS, BOARD_ROWS } from "../constants";
 import { TriangleGameState } from "../Game";
 import { createTriangleFromId, TriangleId } from "../Triangle";
 
@@ -25,9 +25,13 @@ const getCellPotential = (
   return potential;
 };
 
-const iterateThroughBoardCells = (cb: (r: number, c: number) => void) => {
-  for (let row = 0; row < BOARD_ROWS; row++) {
-    for (let col = 0; col < BOARD_COLS; col++) {
+const iterateThroughBoardCells = (
+  cb: (r: number, c: number) => void,
+  rows = BOARD_ROWS,
+  cols = BOARD_COLS
+) => {
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
       cb(row, col);
     }
   }
@@ -107,4 +111,64 @@ export const findFillableGroup = (
   }
 
   return Array.from(output);
+};
+
+export const findEdgeCells = (
+  rows = BOARD_ROWS,
+  cols = BOARD_COLS
+): Set<TriangleId> => {
+  const edgeCells = new Set<TriangleId>();
+  iterateThroughBoardCells(
+    (r, c) => {
+      if (r === 0 || r === rows - 1 || c === 0 || c === cols - 1) {
+        const cellId: TriangleId = `t-${r}-${c}`;
+        edgeCells.add(cellId);
+      }
+    },
+    rows,
+    cols
+  );
+  return edgeCells;
+};
+
+export const findOutsideCells = (
+  capturedCells: TriangleGameState["capturedCells"],
+  playerId: number,
+  rows = BOARD_ROWS,
+  cols = BOARD_COLS
+): Set<TriangleId> => {
+  const outsideCells = new Set<TriangleId>();
+  const visitedCells = new Set<TriangleId>();
+  const edgeCells = findEdgeCells(rows, cols);
+  const otherPlayersCells = Object.entries(capturedCells)
+    .filter(([_, owner]) => owner !== playerId)
+    .map(([cellId, _]) => cellId as TriangleId);
+  otherPlayersCells.forEach((cellId) => visitedCells.add(cellId));
+  const queue = Array.from<TriangleId>([...edgeCells, ...otherPlayersCells]);
+
+  while (queue.length > 0) {
+    const currentCellId = queue.shift();
+    if (visitedCells.has(currentCellId)) {
+      continue;
+    }
+    visitedCells.add(currentCellId);
+    const owner = capturedCells[currentCellId];
+    if (owner === playerId) {
+      continue;
+    }
+    outsideCells.add(currentCellId);
+
+    const triangle = createTriangleFromId(currentCellId, rows, cols);
+    for (const neighborId of triangle.neighborIds) {
+      if (visitedCells.has(neighborId)) {
+        continue;
+      }
+      const owner = capturedCells[neighborId];
+      if (owner !== playerId) {
+        outsideCells.add(neighborId);
+        queue.push(neighborId);
+      }
+    }
+  }
+  return outsideCells;
 };

@@ -1,4 +1,9 @@
-import { findFillableGroup, mapCellPotentials } from ".";
+import {
+  findEdgeCells,
+  findFillableGroup,
+  findOutsideCells,
+  mapCellPotentials,
+} from ".";
 import { TriangleGameState } from "../Game";
 import { TriangleId } from "../Triangle";
 
@@ -72,5 +77,83 @@ describe(`${findFillableGroup.name}`, () => {
     for (const cellId of expectedCells) {
       expect(fillableGroup).toContain(cellId);
     }
+  });
+});
+
+const sampleRows = 6;
+const sampleCols = 12;
+
+describe(`${findEdgeCells.name}`, () => {
+  const edgeCells = findEdgeCells(sampleRows, sampleCols);
+  const expectedEdgeCells = new Set<TriangleId>([
+    "t-0-0",
+    "t-0-1",
+    "t-0-2",
+    "t-0-3",
+    "t-0-4",
+    "t-0-5",
+    "t-0-6",
+    "t-0-7",
+    "t-0-8",
+    "t-0-9",
+    "t-0-10",
+    "t-0-11",
+    "t-1-0",
+    "t-1-11",
+    "t-2-0",
+    "t-2-11",
+    "t-3-0",
+    "t-3-11",
+    "t-4-0",
+    "t-4-11",
+    "t-5-0",
+    "t-5-1",
+    "t-5-2",
+    "t-5-3",
+    "t-5-4",
+    "t-5-5",
+    "t-5-6",
+    "t-5-7",
+    "t-5-8",
+    "t-5-9",
+    "t-5-10",
+    "t-5-11",
+  ]);
+
+  it("should have correct size", () => {
+    expect(edgeCells.size).toBe(expectedEdgeCells.size);
+  });
+
+  it("should contain specific cells", () => {
+    for (const cellId of expectedEdgeCells) {
+      expect(edgeCells.has(cellId)).toBe(true);
+    }
+  });
+});
+
+describe(`${findOutsideCells.name}`, () => {
+  describe("when used in a basic situation", () => {
+    const capturedCells: TriangleGameState["capturedCells"] = {
+      "t-1-1": playerId,
+      "t-1-6": 1,
+      "t-2-4": 2,
+    };
+
+    const outsideCells = findOutsideCells(
+      capturedCells,
+      playerId,
+      sampleRows,
+      sampleCols
+    );
+
+    it("should have correct size", () => {
+      expect(outsideCells.size).toBe(69);
+    });
+
+    it("should not contain the captured cells", () => {
+      for (const cellId of Object.keys(capturedCells)) {
+        expect(outsideCells.has(cellId as TriangleId)).toBe(false);
+      }
+    });
   });
 });
