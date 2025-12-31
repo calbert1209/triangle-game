@@ -143,7 +143,6 @@ export const findOutsideCells = (
   const otherPlayersCells = Object.entries(capturedCells)
     .filter(([_, owner]) => owner !== playerId)
     .map(([cellId, _]) => cellId as TriangleId);
-  otherPlayersCells.forEach((cellId) => visitedCells.add(cellId));
   const queue = Array.from<TriangleId>([...edgeCells, ...otherPlayersCells]);
 
   while (queue.length > 0) {
@@ -171,4 +170,25 @@ export const findOutsideCells = (
     }
   }
   return outsideCells;
+};
+
+export const findEnclosedUnownedCells = (
+  capturedCells: TriangleGameState["capturedCells"],
+  playerId: number,
+  rows = BOARD_ROWS,
+  cols = BOARD_COLS
+): Set<TriangleId> => {
+  const outsideCells = findOutsideCells(capturedCells, playerId, rows, cols);
+  const enclosedCells = new Set<TriangleId>();
+  iterateThroughBoardCells(
+    (r, c) => {
+      const cellId: TriangleId = `t-${r}-${c}`;
+      if (!outsideCells.has(cellId) && capturedCells[cellId] === undefined) {
+        enclosedCells.add(cellId);
+      }
+    },
+    rows,
+    cols
+  );
+  return enclosedCells;
 };

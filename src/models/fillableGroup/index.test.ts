@@ -1,5 +1,6 @@
 import {
   findEdgeCells,
+  findEnclosedUnownedCells,
   findFillableGroup,
   findOutsideCells,
   mapCellPotentials,
@@ -147,13 +148,131 @@ describe(`${findOutsideCells.name}`, () => {
     );
 
     it("should have correct size", () => {
-      expect(outsideCells.size).toBe(69);
+      expect(outsideCells.size).toBe(71);
     });
 
-    it("should not contain the captured cells", () => {
-      for (const cellId of Object.keys(capturedCells)) {
-        expect(outsideCells.has(cellId as TriangleId)).toBe(false);
+    it("should not contain the players captured cells", () => {
+      expect(outsideCells.has("t-1-1")).toBe(false);
+    });
+  });
+
+  describe("when only some cells are enclosed", () => {
+    const capturedCells: TriangleGameState["capturedCells"] = {
+      "t-0-4": playerId,
+      "t-0-8": playerId,
+      "t-1-2": playerId,
+      "t-1-6": playerId,
+      "t-1-10": playerId,
+      "t-2-2": playerId,
+      "t-2-6": playerId,
+      "t-2-10": playerId,
+      "t-3-0": playerId,
+      "t-3-4": playerId,
+      "t-3-8": 1,
+      "t-3-9": 1,
+      "t-3-10": 1,
+      "t-4-4": playerId,
+      "t-4-9": 1,
+      "t-5-2": playerId,
+    };
+
+    const outsideCells = findOutsideCells(
+      capturedCells,
+      playerId,
+      sampleRows,
+      sampleCols
+    );
+
+    it("should have correct size", () => {
+      expect(outsideCells.size).toBe(54);
+    });
+
+    it("should not cells enclosed by the player's cells", () => {
+      const enclosedCells: TriangleId[] = [
+        "t-1-3",
+        "t-1-4",
+        "t-1-5",
+        "t-2-3",
+        "t-2-4",
+        "t-2-5",
+      ];
+      for (const cellId of enclosedCells) {
+        expect(outsideCells.has(cellId)).toBe(false);
       }
     });
+
+    it("should contain cells owned by another player", () => {
+      const otherPlayerCells = (
+        Object.keys(capturedCells) as TriangleId[]
+      ).filter((cellId) => capturedCells[cellId] !== playerId);
+
+      for (const cellId of otherPlayerCells) {
+        expect(outsideCells.has(cellId)).toBe(true);
+      }
+    });
+
+    it("should contain cells encircled by two players cells", () => {
+      const encircledCells: TriangleId[] = [
+        "t-1-7",
+        "t-1-8",
+        "t-1-9",
+        "t-2-7",
+        "t-2-8",
+        "t-2-9",
+      ];
+      for (const cellId of encircledCells) {
+        expect(outsideCells.has(cellId)).toBe(true);
+      }
+    });
+
+    it("should contain cells almost encircled by players cells", () => {
+      const encircledCells: TriangleId[] = [
+        "t-3-1",
+        "t-3-2",
+        "t-3-3",
+        "t-4-1",
+        "t-4-2",
+        "t-4-3",
+      ];
+      for (const cellId of encircledCells) {
+        expect(outsideCells.has(cellId)).toBe(true);
+      }
+    });
+  });
+});
+
+describe(`${findEnclosedUnownedCells.name}`, () => {
+  const capturedCells: TriangleGameState["capturedCells"] = {
+    "t-0-2": playerId,
+    "t-0-4": playerId,
+    "t-1-0": playerId,
+    "t-1-6": playerId,
+    "t-2-0": playerId,
+    "t-2-6": playerId,
+    "t-3-2": playerId,
+    "t-3-4": playerId,
+  };
+
+  const enclosed = findEnclosedUnownedCells(capturedCells, playerId, 4, 7);
+  const expectedIds: TriangleId[] = [
+    "t-1-1",
+    "t-1-2",
+    "t-1-3",
+    "t-1-4",
+    "t-1-5",
+    "t-2-1",
+    "t-2-2",
+    "t-2-3",
+    "t-2-4",
+    "t-2-5",
+  ];
+
+  it("should have a size equal to the enclosed, unknown cells", () => {
+    expect(enclosed.size).toEqual(expectedIds.length);
+  });
+  it("should include the enclosed, unowned cells", () => {
+    for (const cellId of expectedIds) {
+      expect(enclosed.has(cellId)).toBe(true);
+    }
   });
 });
