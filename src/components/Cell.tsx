@@ -14,8 +14,8 @@ export const Cell = ({
     <use
       key={triangle.id}
       href={href}
-      x={triangle.col * 25 - 15}
-      y={triangle.row * 42 - 10}
+      x={triangle.col * 25 + 15}
+      y={triangle.row * 42 - 100}
       fill={fill}
       stroke="#95A5A6"
       strokeWidth="0.5"

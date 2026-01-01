@@ -4,7 +4,8 @@ import { BoardProps } from "boardgame.io/dist/types/packages/react";
 import { TriangleGameState } from "../models/Game";
 import { COLOR_MAP, getCellColorHex } from "../models/colors";
 import { findEdgeCells } from "../models/fillableGroup";
-import { useCallback } from "preact/hooks";
+import { useCallback, useMemo } from "preact/hooks";
+import { BOARD_COLS, BOARD_ROWS } from "../models/constants";
 
 interface Props extends BoardProps<TriangleGameState> {
   triangles: Array<Triangle>;
@@ -28,29 +29,39 @@ export const GameBoard = ({ G, ctx, triangles, moves }: Props) => {
     },
     [G, ctx]
   );
+
+  const newViewBox = useMemo(() => {
+    const maxCol = BOARD_COLS - 2; //Math.max(...triangles.map((t) => t.col));
+    const maxRow = BOARD_ROWS - 2; //Math.max(...triangles.map((t) => t.row));
+    const minX = 15;
+    const minY = -60;
+    const maxX = maxCol * 25 + 15 + 79; // col position + offset + triangle width
+    const maxY = maxRow * 42 - 60 + 79; // row position + offset + triangle height
+    const width = maxX - minX;
+    const height = maxY - minY;
+    return `${minX} ${minY} ${width} ${height}`;
+  }, []);
+
   return (
     <svg
       id="svgBox"
-      viewBox="0 0 1200 550"
+      viewBox={newViewBox}
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid meet"
     >
       <defs>
         <path id="triangle" d="M31 79 L79 79 L55 37.6 Z" />
         <path id="triangle-down" d="M31 37.6 L79 37.6 L55 79 Z" />
-        <linearGradient id="boardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#ECF0F1;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#D5DBDB;stop-opacity:1" />
-        </linearGradient>
       </defs>
-      <rect width="1200" height="550" fill="url(#boardGradient)" />
-      {triangles.map((triangle) => (
-        <Cell
-          triangle={triangle}
-          fill={getFill(triangle.id)}
-          onClick={onClick}
-        />
-      ))}
+      {triangles
+        .filter((triangle) => !edgeCells.has(triangle.id))
+        .map((triangle) => (
+          <Cell
+            triangle={triangle}
+            fill={getFill(triangle.id)}
+            onClick={onClick}
+          />
+        ))}
     </svg>
   );
 };

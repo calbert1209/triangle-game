@@ -49,6 +49,11 @@ main {
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: calc(95vh);
+  overflow: hidden;
 }
 
 .row {
@@ -58,10 +63,13 @@ main {
   justify-content: center;
 }
 
-svg.svgBox {
-  display: block;
+svg#svgBox {
   width: 100%;
+  max-width: 80vw;
+  max-height: 70vh;
   height: auto;
+  display: block;
+  background: linear-gradient(135deg, #ecf0f1, #d5dbdb);
 }
 
 #colorBtn {
