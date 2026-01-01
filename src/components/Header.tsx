@@ -19,9 +19,11 @@ export const GameHeader = ({
   }, [G.capturedCells]);
   return (
     <div class="row">
-      <div id="redCount">{counts.red}</div>
-      <div id="blueCount">{counts.blue}</div>
-      <div id="greenCount">{counts.green}</div>
+      <div className="counts">
+        <div id="redCount">{counts.red}</div>
+        <div id="blueCount">{counts.blue}</div>
+        <div id="greenCount">{counts.green}</div>
+      </div>
       {ctx.activePlayers[ctx.currentPlayer] === "roll" ? (
         <div id="status">
           <button id="rollBtn" onClick={moves.rollDice}>

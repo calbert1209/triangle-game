@@ -23,6 +23,9 @@
     0 calc(100% - 26px),
     0 26px
   );
+
+  --upward-triangle: polygon(50% 0%, 0% 100%, 100% 100%);
+  --downward-triangle: polygon(0% 0%, 100% 0%, 50% 100%);
 }
 
 * {
@@ -107,9 +110,13 @@ svg#svgBox {
   user-select: none;
 }
 
+.counts {
+  display: flex;
+}
+
 #redCount,
-#blueCount,
-#greenCount {
+#greenCount,
+#blueCount {
   font-size: 18px;
   font-weight: 600;
   width: 60px;
@@ -117,8 +124,6 @@ svg#svgBox {
   color: white;
   display: flex;
   justify-content: center;
-  align-items: end;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
   position: relative;
@@ -145,14 +150,20 @@ svg#svgBox {
 
 #redCount {
   background: linear-gradient(135deg, #ff3b3b 0%, #e62e2e 100%);
+  clip-path: var(--upward-triangle);
+  align-items: end;
 }
 
 #blueCount {
   background: linear-gradient(135deg, #3b8bff 0%, #2e73e6 100%);
+  clip-path: var(--downward-triangle);
+  align-items: start;
 }
 
 #greenCount {
   background: linear-gradient(135deg, #00d66f 0%, #00b85c 100%);
+  clip-path: var(--upward-triangle);
+  align-items: end;
 }
 
 #svgBox {
