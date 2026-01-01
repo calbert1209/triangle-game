@@ -2,10 +2,17 @@ import { defineConfig } from "vitest/config";
 import preact from "@preact/preset-vite";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [preact()],
-  test: {
-    environment: "happy-dom",
-    globals: true,
-  },
+export default defineConfig(({ command, mode }) => {
+  const baseConfig = {
+    plugins: [preact()],
+  };
+
+  if (command === "serve") {
+    return baseConfig;
+  }
+
+  return {
+    ...baseConfig,
+    base: "/triangle-game/",
+  };
 });
