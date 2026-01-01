@@ -26,6 +26,64 @@
 
   --upward-triangle: polygon(50% 0%, 0% 100%, 100% 100%);
   --downward-triangle: polygon(0% 0%, 100% 0%, 50% 100%);
+
+  --red-50: #ffebee;
+  --red-100: #ffcdd2;
+  --red-200: #ef9a9a;
+  --red-300: #e57373;
+  --red-400: #ef5350;
+  --red-500: #f44336;
+  --red-600: #e53935;
+  --red-700: #d32f2f;
+  --red-800: #c62828;
+  --red-900: #b71c1c;
+  --red-A100: #ff8a80;
+  --red-A200: #ff5252;
+  --red-A400: #ff1744;
+  --red-A700: #d50000;
+
+  --indigo-50: #e8eaf6;
+  --indigo-100: #c5cae9;
+  --indigo-200: #9fa8da;
+  --indigo-300: #7986cb;
+  --indigo-400: #5c6bc0;
+  --indigo-500: #3f51b5;
+  --indigo-600: #3949ab;
+  --indigo-700: #303f9f;
+  --indigo-800: #283593;
+  --indigo-900: #1a237e;
+  --indigo-A100: #8c9eff;
+  --indigo-A200: #536dfe;
+  --indigo-A400: #3d5afe;
+  --indigo-A700: #304ffe;
+
+  --green-50: #e8f5e9;
+  --green-100: #c8e6c9;
+  --green-200: #a5d6a7;
+  --green-300: #81c784;
+  --green-400: #66bb6a;
+  --green-500: #4caf50;
+  --green-600: #43a047;
+  --green-700: #388e3c;
+  --green-800: #2e7d32;
+  --green-900: #1b5e20;
+  --green-A100: #b9f6ca;
+  --green-A200: #69f0ae;
+  --green-A400: #00e676;
+  --green-A700: #00c853;
+
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #eeeeee;
+  --gray-300: #e0e0e0;
+  --gray-400: #bdbdbd;
+  --gray-500: #9e9e9e;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+
+  --box-shadow: 0 8px 32px var(--gray-900);
 }
 
 * {
@@ -50,19 +108,19 @@ body {
 }
 
 header {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--gray-50);
   backdrop-filter: blur(10px);
   padding: 20px 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
   clip-path: var(--bevel-polygon);
 }
 
 main {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--gray-50);
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,24 +142,36 @@ svg#svgBox {
   max-height: 70vh;
   height: auto;
   display: block;
-  background: linear-gradient(135deg, #ecf0f1, #d5dbdb);
+  background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
   clip-path: var(--bevel-polygon);
 }
 
-#colorBtn {
-  background: white;
-  border: 2px solid #e0e7ff;
-  border-radius: 12px;
-  padding: 8px;
+#rollBtn {
+  width: 60px;
+  height: 52px;
+  background: linear-gradient(135deg, var(--gray-300), var(--gray-400));
+  border: none;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  clip-path: var(--downward-triangle);
+  box-shadow: 0 4px 12px var(--gray-900);
   transition: all 0.3s ease;
+  padding: 0;
+  padding-top: 6px;
+}
+
+#rollBtn img {
+  width: 24px;
+  height: 24px;
 }
 
 #swatch {
   width: 32px;
   height: 32px;
   background-color: white;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--gray-50);
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -124,7 +194,7 @@ svg#svgBox {
   color: white;
   display: flex;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--gray-900);
   transition: all 0.3s ease;
   position: relative;
 }
@@ -149,13 +219,17 @@ svg#svgBox {
 }
 
 #redCount {
-  background: linear-gradient(135deg, #ff3b3b 0%, #e62e2e 100%);
+  background: linear-gradient(135deg, var(--red-A200) 0%, var(--red-600) 100%);
   clip-path: var(--upward-triangle);
   align-items: end;
 }
 
 #blueCount {
-  background: linear-gradient(135deg, #3b8bff 0%, #2e73e6 100%);
+  background: linear-gradient(
+    135deg,
+    var(--indigo-A400) 0%,
+    var(--indigo-A700) 100%
+  );
   clip-path: var(--downward-triangle);
   align-items: start;
 }

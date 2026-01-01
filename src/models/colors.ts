@@ -3,14 +3,14 @@ import { TriangleGameState } from "./Game";
 import { TriangleId } from "./Triangle";
 
 export const COLOR_MAP: Record<string, string> = {
-  red: "#FF3B3B",
-  pickedRed: "#FF6262",
-  blue: "#3B8BFF",
-  pickedBlue: "#62A2FF",
-  green: "#00D66F",
-  pickedGreen: "#33DE8C",
+  red: "#ff5252",
+  pickedRed: "#ff8a80",
+  blue: "#3d5afe",
+  pickedBlue: "#8c9eff",
+  green: "#00e676",
+  pickedGreen: "#69f0ae",
   white: "white",
-  grey: "#f0f0f0",
+  grey: "#f5f5f5",
 };
 
 export const getCellColorHex = (

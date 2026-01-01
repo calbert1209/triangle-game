@@ -27,7 +27,7 @@ export const GameHeader = ({
       {ctx.activePlayers[ctx.currentPlayer] === "roll" ? (
         <div id="status">
           <button id="rollBtn" onClick={moves.rollDice}>
-            Roll Dice
+            <img src="/dice.svg" alt="Roll Dice" />
           </button>
         </div>
       ) : null}
