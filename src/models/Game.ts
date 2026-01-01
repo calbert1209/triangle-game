@@ -18,7 +18,8 @@ const rollDice: MoveFn<TriangleGameState> = ({ G, events }) => {
 };
 
 const pickCell: MoveFn<TriangleGameState> = ({ G, ctx }, id: TriangleId) => {
-  if (G.stagedCells.length >= G.tries) {
+  const idAlreadyStaged = G.stagedCells.includes(id);
+  if (G.stagedCells.length >= G.tries && !idAlreadyStaged) {
     return INVALID_MOVE;
   }
 
@@ -26,12 +27,12 @@ const pickCell: MoveFn<TriangleGameState> = ({ G, ctx }, id: TriangleId) => {
     return INVALID_MOVE;
   }
 
-  if (G.stagedCells.includes(id)) {
-    return INVALID_MOVE;
-  }
-
   const playerId = parseInt(ctx.currentPlayer, 10);
-  G.stagedCells.push(id);
+  if (idAlreadyStaged) {
+    G.stagedCells = G.stagedCells.filter((cellId) => cellId !== id);
+  } else {
+    G.stagedCells.push(id);
+  }
   const stagedAsCaptured = Object.fromEntries(
     G.stagedCells.map((id) => [id, playerId])
   );
@@ -74,6 +75,9 @@ export const TriangleGame: Game<TriangleGameState> = {
     };
   },
 
+  minPlayers: 2,
+  maxPlayers: 3,
+
   moves: {
     rollDice,
     pickCell,
@@ -98,6 +102,7 @@ export const TriangleGame: Game<TriangleGameState> = {
 };
 
 export const TriangleGameApp = Client({
+  numPlayers: 3,
   game: TriangleGame,
   board: GameSurface,
 });
