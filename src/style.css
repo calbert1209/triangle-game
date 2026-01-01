@@ -12,6 +12,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --bevel-polygon: polygon(
+    15px 0,
+    calc(100% - 15px) 0,
+    100% 26px,
+    100% calc(100% - 26px),
+    calc(100% - 15px) 100%,
+    15px 100%,
+    0 calc(100% - 26px),
+    0 26px
+  );
 }
 
 * {
@@ -38,9 +49,9 @@ body {
 header {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 16px;
   padding: 20px 30px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  clip-path: var(--bevel-polygon);
 }
 
 main {
@@ -54,6 +65,7 @@ main {
   align-items: center;
   max-height: calc(95vh);
   overflow: hidden;
+  clip-path: var(--bevel-polygon);
 }
 
 .row {
@@ -70,6 +82,7 @@ svg#svgBox {
   height: auto;
   display: block;
   background: linear-gradient(135deg, #ecf0f1, #d5dbdb);
+  clip-path: var(--bevel-polygon);
 }
 
 #colorBtn {
