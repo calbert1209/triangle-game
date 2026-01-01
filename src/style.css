@@ -58,6 +58,12 @@ main {
   justify-content: center;
 }
 
+svg.svgBox {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 #colorBtn {
   background: white;
   border: 2px solid #e0e7ff;
@@ -65,18 +71,7 @@ main {
   padding: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
 }
-
-/* #colorBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-color: #c7d2fe;
-}
-
-#colorBtn:active {
-  transform: translateY(0);
-} */
 
 #swatch {
   width: 32px;

@@ -10,6 +10,7 @@ export const COLOR_MAP: Record<string, string> = {
   green: "#00D66F",
   pickedGreen: "#33DE8C",
   white: "white",
+  grey: "#f0f0f0",
 };
 
 export const getCellColorHex = (
