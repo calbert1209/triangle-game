@@ -1,7 +1,8 @@
-import { Game, MoveFn } from "boardgame.io";
+import { Game } from "boardgame.io";
 import { TriangleId } from "./Triangle";
-import { INVALID_MOVE } from "boardgame.io/core";
-import { findFillableGroup } from "./fillableGroup";
+import { rollDice, pickCell, revertPickCells, captureCells } from "./moves";
+import { BOARD_COLS, BOARD_ROWS } from "./constants";
+import { getFinalState } from "./finalState";
 
 export interface TriangleGameState {
   capturedCells: Record<TriangleId, number>;
@@ -10,61 +11,8 @@ export interface TriangleGameState {
   fillableGroup: TriangleId[];
 }
 
-const rollDice: MoveFn<TriangleGameState> = ({ G, events }) => {
-  G.tries = Math.floor(Math.random() * 6) + 1;
-  events.endStage();
-};
-
-const pickCell: MoveFn<TriangleGameState> = ({ G, ctx }, id: TriangleId) => {
-  const idAlreadyStaged = G.stagedCells.includes(id);
-  if (G.stagedCells.length >= G.tries && !idAlreadyStaged) {
-    return INVALID_MOVE;
-  }
-
-  if (G.capturedCells[id] !== undefined) {
-    return INVALID_MOVE;
-  }
-
-  const playerId = parseInt(ctx.currentPlayer, 10);
-  if (idAlreadyStaged) {
-    G.stagedCells = G.stagedCells.filter((cellId) => cellId !== id);
-  } else {
-    G.stagedCells.push(id);
-  }
-  const stagedAsCaptured = Object.fromEntries(
-    G.stagedCells.map((id) => [id, playerId])
-  );
-  G.fillableGroup = [
-    ...findFillableGroup({ ...G.capturedCells, ...stagedAsCaptured }, playerId),
-  ];
-};
-
-const revertPickCells: MoveFn<TriangleGameState> = ({ G }) => {
-  G.stagedCells = [];
-  G.fillableGroup = [];
-};
-
-const captureCells: MoveFn<TriangleGameState> = ({ G, ctx, events }) => {
-  if (G.stagedCells.length !== G.tries) {
-    return INVALID_MOVE;
-  }
-  const playerId = parseInt(ctx.currentPlayer, 10);
-  while (G.stagedCells.length > 0) {
-    const stagedTriangleId = G.stagedCells.pop();
-    G.capturedCells[stagedTriangleId] = playerId;
-  }
-
-  while (G.fillableGroup.length > 0) {
-    const fillableTriangleId = G.fillableGroup.pop();
-    G.capturedCells[fillableTriangleId] = playerId;
-  }
-
-  events.endTurn();
-};
-
 export const TriangleGame: Game<TriangleGameState> = {
-  setup: ({ events }): TriangleGameState => {
-    // events.setActivePlayers({ currentPlayer: "roll" });
+  setup: (): TriangleGameState => {
     return {
       capturedCells: {},
       tries: 0,
@@ -81,6 +29,31 @@ export const TriangleGame: Game<TriangleGameState> = {
     pickCell,
     revertPickCells,
     captureCells,
+  },
+
+  endIf: ({ G, ctx }) => {
+    const { capturedCells, stagedCells, fillableGroup } = G;
+    const totalCaptured = Object.keys(capturedCells).length;
+    const totalTriangles = (BOARD_ROWS - 2) * (BOARD_COLS - 2);
+
+    if (
+      totalTriangles >
+      totalCaptured + stagedCells.length + fillableGroup.length
+    )
+      return;
+    const { currentPlayer, numPlayers } = ctx;
+    const finalState = getFinalState({
+      capturedCells,
+      stagedCells: [...stagedCells, ...fillableGroup],
+      currentPlayer,
+      numPlayers,
+    });
+
+    if (finalState.winner === -1) {
+      return { draw: true };
+    }
+
+    return { winner: finalState.winner.toString() };
   },
 
   turn: {
