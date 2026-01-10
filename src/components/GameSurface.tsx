@@ -18,7 +18,20 @@ export const GameSurface = (props: BoardProps<TriangleGameState>) => {
         <GameHeader {...props} />
       </header>
       <main>
-        <GameBoard {...props} triangles={triangles} />
+        {props.ctx.gameover === undefined ? (
+          <GameBoard {...props} triangles={triangles} />
+        ) : (
+          <div>
+            <div>
+              <h4>THE GAME IS OVER!</h4>
+            </div>
+            <div>
+              <h2>
+                🏆 {["🟥", "🟦", "🟩"][props.ctx.gameover?.winner ?? "-1"]} 👑
+              </h2>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

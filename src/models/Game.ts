@@ -56,6 +56,19 @@ export const TriangleGame: Game<TriangleGameState> = {
     return { winner: finalState.winner.toString() };
   },
 
+  onEnd: ({ G, ctx }) => {
+    const playerId = parseInt(ctx.currentPlayer, 10);
+    while (G.stagedCells.length > 0) {
+      const stagedTriangleId = G.stagedCells.pop();
+      G.capturedCells[stagedTriangleId] = playerId;
+    }
+
+    while (G.fillableGroup.length > 0) {
+      const fillableTriangleId = G.fillableGroup.pop();
+      G.capturedCells[fillableTriangleId] = playerId;
+    }
+  },
+
   turn: {
     activePlayers: { currentPlayer: "roll" },
     stages: {
