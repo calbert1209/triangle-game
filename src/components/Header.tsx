@@ -22,20 +22,29 @@ export const GameHeader = ({
   return (
     <div class="row">
       <div className="counts">
-        <div id="redCount">{counts.red}</div>
-        <div id="blueCount">{counts.blue}</div>
-        <div id="greenCount">{counts.green}</div>
+        <div className="counter redCount upward">{counts.red}</div>
+        <div className="counter blueCount downward">{counts.blue}</div>
+        <div
+          className="counter greenCount upward"
+          data-hidden={ctx.numPlayers === 2}
+        >
+          {counts.green}
+        </div>
       </div>
       {ctx.activePlayers[ctx.currentPlayer] === "roll" ? (
         <div id="actionBtns">
-          <button id="rollBtn" onClick={moves.rollDice}>
+          <button id="rollBtn" className="downward" onClick={moves.rollDice}>
             <DiceIcon />
           </button>
         </div>
       ) : null}
       {ctx.activePlayers[ctx.currentPlayer] === "pick" ? (
         <div id="actionBtns">
-          <button id="undoBtn" onClick={moves.revertPickCells}>
+          <button
+            id="undoBtn"
+            className="downward"
+            onClick={moves.revertPickCells}
+          >
             <UndoIcon />
           </button>
           <CaptureButton
@@ -53,17 +62,20 @@ interface CaptureButtonProps extends BoardProps<TriangleGameState> {
 }
 
 const CaptureButton = ({ G, ctx, onClick }: CaptureButtonProps) => {
-  const className = useMemo(() => {
+  const color = useMemo(() => {
     const currentPlayerIndex = parseInt(ctx.currentPlayer, 10);
     return ["red", "blue", "green"][currentPlayerIndex];
   }, [ctx.currentPlayer]);
+
+  const enabled = G.stagedCells.length === G.tries;
   return (
-    <button id="captureBtn" class={className} onClick={onClick}>
-      {G.stagedCells.length === G.tries ? (
-        <CheckMarkIcon />
-      ) : (
-        G.tries - G.stagedCells.length
-      )}
+    <button
+      id="captureBtn"
+      class={`${color} upward`}
+      onClick={onClick}
+      disabled={!enabled}
+    >
+      {enabled ? <CheckMarkIcon /> : G.tries - G.stagedCells.length}
     </button>
   );
 };
