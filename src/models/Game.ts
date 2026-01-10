@@ -1,7 +1,5 @@
 import { Game, MoveFn } from "boardgame.io";
-import { Client } from "boardgame.io/react";
 import { TriangleId } from "./Triangle";
-import { GameSurface } from "../components/GameSurface";
 import { INVALID_MOVE } from "boardgame.io/core";
 import { findFillableGroup } from "./fillableGroup";
 
@@ -100,9 +98,3 @@ export const TriangleGame: Game<TriangleGameState> = {
     },
   },
 };
-
-export const TriangleGameApp = Client({
-  numPlayers: 3,
-  game: TriangleGame,
-  board: GameSurface,
-});
