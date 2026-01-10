@@ -5,6 +5,9 @@ import preact from "@preact/preset-vite";
 export default defineConfig(({ command, mode }) => {
   const baseConfig = {
     plugins: [preact()],
+    test: {
+      globals: true,
+    },
   };
 
   if (command === "serve") {
