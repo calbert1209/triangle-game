@@ -6,9 +6,10 @@ import { GameContextProvider } from "./GameContext";
 import { TriangleContextProvider } from "./TrianglesContext";
 
 export const GameSurface = (props: BoardProps<TriangleGameState>) => {
+  const { boardRows, boardCols } = props.G;
   return (
     <GameContextProvider {...props}>
-      <TriangleContextProvider>
+      <TriangleContextProvider rows={boardRows} cols={boardCols}>
         <div>
           <header>
             <GameHeader />

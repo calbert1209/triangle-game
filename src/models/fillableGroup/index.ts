@@ -1,4 +1,3 @@
-import { BOARD_COLS, BOARD_ROWS } from "../constants";
 import { TriangleGameState } from "../Game";
 import { createTriangleFromId, TriangleId } from "../Triangle";
 

@@ -8,17 +8,17 @@ import { useTrianglesContext } from "./TrianglesContext";
 
 export const GameBoard = () => {
   const { G, ctx, moves } = useGameContext();
-  const { triangles, boardRows, boardCols } = useTrianglesContext();
+  const { triangles } = useTrianglesContext();
 
   const edgeCells = useMemo(() => {
-    return findEdgeCells(boardRows, boardCols);
+    return findEdgeCells(G.boardRows, G.boardCols);
     // TODO: deal with dynamic board size
   }, []);
 
   const onClick = useCallback((id: TriangleId) => {
     if (edgeCells.has(id)) return;
 
-    moves.pickCell(id, boardRows, boardCols);
+    moves.pickCell(id, G.boardRows, G.boardCols);
     // TODO: deal with changes to edgeCells.
   }, []);
 
@@ -29,12 +29,12 @@ export const GameBoard = () => {
       }
       return getCellColorHex(G, ctx, id);
     },
-    [G, ctx]
+    [G, ctx],
   );
 
   const newViewBox = useMemo(() => {
-    const maxRow = boardRows - 2; //Math.max(...triangles.map((t) => t.row));
-    const maxCol = boardCols - 2; //Math.max(...triangles.map((t) => t.col));
+    const maxRow = G.boardRows - 2;
+    const maxCol = G.boardCols - 2;
     const minX = 15;
     const minY = -60;
     const maxX = maxCol * 25 + 15 + 79; // col position + offset + triangle width

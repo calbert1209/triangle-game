@@ -1,7 +1,6 @@
 import { Game } from "boardgame.io";
 import { TriangleId } from "./Triangle";
 import { rollDice, pickCell, revertPickCells, captureCells } from "./moves";
-import { BOARD_COLS, BOARD_ROWS } from "./constants";
 import { getFinalState } from "./finalState";
 
 export interface TriangleGameState {
@@ -41,7 +40,7 @@ export const createTriangleGame = (
   endIf: ({ G, ctx }) => {
     const { capturedCells, stagedCells, fillableGroup } = G;
     const totalCaptured = Object.keys(capturedCells).length;
-    const totalTriangles = (BOARD_ROWS - 2) * (BOARD_COLS - 2);
+    const totalTriangles = (G.boardRows - 2) * (G.boardCols - 2);
 
     if (
       totalTriangles >

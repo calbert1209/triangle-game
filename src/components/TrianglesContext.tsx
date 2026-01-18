@@ -1,45 +1,42 @@
 import { createTriangle, Triangle } from "../models/Triangle";
-import { BOARD_ROWS, BOARD_COLS } from "../models/constants";
 import { ComponentChildren, createContext } from "preact";
 import { useContext, useMemo } from "preact/hooks";
 
 interface TrianglesContext {
   triangles: Triangle[];
-  boardRows: number;
-  boardCols: number;
 }
 
 const initialTrianglesContext = {
   triangles: [],
-  boardRows: 0,
-  boardCols: 0,
 };
 
 const TrianglesContext = createContext<TrianglesContext>(
-  initialTrianglesContext
+  initialTrianglesContext,
 );
 
 interface TrianglesContextProviderProps {
   children: ComponentChildren;
+  rows: number;
+  cols: number;
 }
 
 export const TriangleContextProvider = ({
+  rows,
+  cols,
   children,
 }: TrianglesContextProviderProps) => {
   const triangles = useMemo(
     () =>
-      Array.from({ length: BOARD_ROWS }).flatMap((_, row) =>
-        Array.from({ length: BOARD_COLS }).map((_, col) => {
-          return createTriangle(row, col, BOARD_ROWS, BOARD_COLS);
-        })
+      Array.from({ length: rows }).flatMap((_, row) =>
+        Array.from({ length: cols }).map((_, col) => {
+          return createTriangle(row, col, rows, cols);
+        }),
       ),
-    []
+    [],
   );
 
   return (
-    <TrianglesContext.Provider
-      value={{ triangles, boardRows: BOARD_ROWS, boardCols: BOARD_COLS }}
-    >
+    <TrianglesContext.Provider value={{ triangles }}>
       {children}
     </TrianglesContext.Provider>
   );
@@ -49,7 +46,7 @@ export const useTrianglesContext = () => {
   const context = useContext(TrianglesContext);
   if (context === undefined) {
     throw new Error(
-      "useTrianglesContext must be used within a TriangleContextProvider"
+      "useTrianglesContext must be used within a TriangleContextProvider",
     );
   }
   return context;

@@ -1,11 +1,8 @@
-import { Fragment } from "preact";
 import { createTriangleGame } from "../models/Game";
 import { useMemo } from "preact/hooks";
 import { Client } from "boardgame.io/react";
 import { GameSurface } from "./GameSurface";
-import { BOARD_COLS, BOARD_ROWS } from "../models/constants";
-
-const TriangleGame = createTriangleGame(BOARD_ROWS, BOARD_COLS);
+import { DIMENSIONS, MOBILE_DIMENSIONS } from "../models/constants";
 
 const createClient = (numPlayers: number, rows: number, cols: number) => {
   return Client({
@@ -20,9 +17,9 @@ export const TriangleGameApp = () => {
     const params = new URLSearchParams(window.location.search);
     const numPlayers = params.get("players") === "3" ? 3 : 2;
     const isMobile = params.get("mobile") === "true";
-    const [rows, cols] = isMobile ? [7, 7] : [BOARD_ROWS, BOARD_COLS];
+    const [rows, cols] = isMobile ? MOBILE_DIMENSIONS : DIMENSIONS;
     return createClient(numPlayers, rows, cols);
-  }, []);
+  }, [window.location.search]);
 
   return <Client />;
 };
