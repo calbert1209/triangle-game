@@ -7,20 +7,22 @@ import { findEdgeCells } from "../models/fillableGroup";
 import { useCallback, useMemo } from "preact/hooks";
 import { BOARD_COLS, BOARD_ROWS } from "../models/constants";
 import { useGameContext } from "./GameContext";
+import { useTrianglesContext } from "./TrianglesContext";
 
-interface Props {
-  triangles: Array<Triangle>;
-}
-
-const edgeCells = findEdgeCells();
-
-export const GameBoard = ({ triangles }: Props) => {
+export const GameBoard = () => {
   const { G, ctx, moves } = useGameContext();
+  const { triangles, boardRows, boardCols } = useTrianglesContext();
+
+  const edgeCells = useMemo(() => {
+    return findEdgeCells(boardRows, boardCols);
+    // TODO: deal with dynamic board size
+  }, []);
 
   const onClick = useCallback((id: TriangleId) => {
     if (edgeCells.has(id)) return;
 
-    moves.pickCell(id);
+    moves.pickCell(id, boardRows, boardCols);
+    // TODO: deal with changes to edgeCells.
   }, []);
 
   const getFill = useCallback(

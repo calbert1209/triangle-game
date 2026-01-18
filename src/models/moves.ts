@@ -11,7 +11,9 @@ export const rollDice: MoveFn<TriangleGameState> = ({ G, events }) => {
 
 export const pickCell: MoveFn<TriangleGameState> = (
   { G, ctx },
-  id: TriangleId
+  id: TriangleId,
+  rows: number,
+  cols: number
 ) => {
   const idAlreadyStaged = G.stagedCells.includes(id);
   if (G.stagedCells.length >= G.tries && !idAlreadyStaged) {
@@ -32,7 +34,12 @@ export const pickCell: MoveFn<TriangleGameState> = (
     G.stagedCells.map((id) => [id, playerId])
   );
   G.fillableGroup = [
-    ...findFillableGroup({ ...G.capturedCells, ...stagedAsCaptured }, playerId),
+    ...findFillableGroup(
+      { ...G.capturedCells, ...stagedAsCaptured },
+      playerId,
+      rows,
+      cols
+    ),
   ];
 };
 
