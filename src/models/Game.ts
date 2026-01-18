@@ -9,15 +9,22 @@ export interface TriangleGameState {
   tries: number;
   stagedCells: TriangleId[];
   fillableGroup: TriangleId[];
+  boardRows: number;
+  boardCols: number;
 }
 
-export const TriangleGame: Game<TriangleGameState> = {
+export const createTriangleGame = (
+  boardRows: number,
+  boardCols: number,
+): Game<TriangleGameState> => ({
   setup: (): TriangleGameState => {
     return {
       capturedCells: {},
       tries: 0,
       stagedCells: [],
       fillableGroup: [],
+      boardRows,
+      boardCols,
     };
   },
 
@@ -83,4 +90,4 @@ export const TriangleGame: Game<TriangleGameState> = {
       },
     },
   },
-};
+});
