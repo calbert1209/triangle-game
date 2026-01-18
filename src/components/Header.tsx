@@ -1,14 +1,10 @@
-import { BoardProps } from "boardgame.io/dist/types/packages/react";
-import { TriangleGameState } from "../models/Game";
 import { useMemo } from "preact/hooks";
 import { DiceIcon, UndoIcon, CheckMarkIcon } from "./Icons";
+import { useGameContext } from "./GameContext";
 
-export const GameHeader = ({
-  G,
-  ctx,
-  moves,
-  ...rest
-}: BoardProps<TriangleGameState>) => {
+export const GameHeader = () => {
+  const { G, ctx, moves } = useGameContext();
+
   const counts = useMemo(() => {
     const [red, blue, green] = Object.values(G.capturedCells).reduce(
       (acc, owner) => {
@@ -47,21 +43,19 @@ export const GameHeader = ({
           >
             <UndoIcon />
           </button>
-          <CaptureButton
-            onClick={moves.captureCells}
-            {...{ G, ctx, moves, ...rest }}
-          />
+          <CaptureButton onClick={moves.captureCells} />
         </div>
       ) : null}
     </div>
   );
 };
 
-interface CaptureButtonProps extends BoardProps<TriangleGameState> {
+interface CaptureButtonProps {
   onClick: () => void;
 }
 
-const CaptureButton = ({ G, ctx, onClick }: CaptureButtonProps) => {
+const CaptureButton = ({ onClick }: CaptureButtonProps) => {
+  const { G, ctx } = useGameContext();
   const color = useMemo(() => {
     const currentPlayerIndex = parseInt(ctx.currentPlayer, 10);
     return ["red", "blue", "green"][currentPlayerIndex];

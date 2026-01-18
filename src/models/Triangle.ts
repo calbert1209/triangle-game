@@ -1,5 +1,3 @@
-import { BOARD_COLS, BOARD_ROWS } from "./constants";
-
 export type TriangleId = `t-${number}-${number}`;
 
 export const getRowColFromId = (id: TriangleId): [number, number] => {
@@ -18,8 +16,8 @@ export interface Triangle {
 export const createTriangle = (
   row: number,
   col: number,
-  rows = BOARD_ROWS,
-  cols = BOARD_COLS
+  rows: number,
+  cols: number
 ): Triangle => {
   const direction = (col + row) % 2 === 0 ? "up" : "down";
   const id: TriangleId = `t-${row}-${col}`;
@@ -45,8 +43,8 @@ export const createTriangle = (
 
 export const createTriangleFromId = (
   id: TriangleId,
-  rows = BOARD_ROWS,
-  cols = BOARD_COLS
+  rows: number,
+  cols: number
 ): Triangle => {
   const [row, col] = getRowColFromId(id);
   return createTriangle(row, col, rows, cols);

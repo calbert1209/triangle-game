@@ -1,23 +1,24 @@
-import { Triangle, TriangleId } from "../models/Triangle";
+import { TriangleId } from "../models/Triangle";
 import { Cell } from "./Cell";
-import { BoardProps } from "boardgame.io/dist/types/packages/react";
-import { TriangleGameState } from "../models/Game";
 import { COLOR_MAP, getCellColorHex } from "../models/colors";
 import { findEdgeCells } from "../models/fillableGroup";
 import { useCallback, useMemo } from "preact/hooks";
-import { BOARD_COLS, BOARD_ROWS } from "../models/constants";
+import { useGameContext } from "./GameContext";
+import { TRIANGLE_SIZE, X_OFFSET, Y_OFFSET } from "../models/constants";
 
-interface Props extends BoardProps<TriangleGameState> {
-  triangles: Array<Triangle>;
-}
+export const GameBoard = () => {
+  const { G, ctx, moves, triangles } = useGameContext();
 
-const edgeCells = findEdgeCells();
+  const edgeCells = useMemo(() => {
+    return findEdgeCells(G.boardRows, G.boardCols);
+    // TODO: deal with dynamic board size
+  }, []);
 
-export const GameBoard = ({ G, ctx, triangles, moves }: Props) => {
   const onClick = useCallback((id: TriangleId) => {
     if (edgeCells.has(id)) return;
 
     moves.pickCell(id);
+    // TODO: deal with changes to edgeCells.
   }, []);
 
   const getFill = useCallback(
@@ -27,19 +28,20 @@ export const GameBoard = ({ G, ctx, triangles, moves }: Props) => {
       }
       return getCellColorHex(G, ctx, id);
     },
-    [G, ctx]
+    [G, ctx],
   );
 
   const newViewBox = useMemo(() => {
-    const maxCol = BOARD_COLS - 2; //Math.max(...triangles.map((t) => t.col));
-    const maxRow = BOARD_ROWS - 2; //Math.max(...triangles.map((t) => t.row));
-    const minX = 15;
-    const minY = -60;
-    const maxX = maxCol * 25 + 15 + 79; // col position + offset + triangle width
-    const maxY = maxRow * 42 - 60 + 79; // row position + offset + triangle height
+    const maxRow = G.boardRows - 2;
+    const maxCol = G.boardCols - 2;
+    const minX = X_OFFSET;
+    const minY = Y_OFFSET;
+    const maxX = maxCol * 25 + X_OFFSET + TRIANGLE_SIZE; // col position + offset + triangle width
+    const maxY = maxRow * 42 + Y_OFFSET + TRIANGLE_SIZE; // row position + offset + triangle height
     const width = maxX - minX;
     const height = maxY - minY;
     return `${minX} ${minY} ${width} ${height}`;
+    // TODO: deal with dynamic board size
   }, []);
 
   return (

@@ -1,7 +1,6 @@
 import { Game } from "boardgame.io";
 import { TriangleId } from "./Triangle";
 import { rollDice, pickCell, revertPickCells, captureCells } from "./moves";
-import { BOARD_COLS, BOARD_ROWS } from "./constants";
 import { getFinalState } from "./finalState";
 
 export interface TriangleGameState {
@@ -9,15 +8,22 @@ export interface TriangleGameState {
   tries: number;
   stagedCells: TriangleId[];
   fillableGroup: TriangleId[];
+  boardRows: number;
+  boardCols: number;
 }
 
-export const TriangleGame: Game<TriangleGameState> = {
+export const createTriangleGame = (
+  boardRows: number,
+  boardCols: number,
+): Game<TriangleGameState> => ({
   setup: (): TriangleGameState => {
     return {
       capturedCells: {},
       tries: 0,
       stagedCells: [],
       fillableGroup: [],
+      boardRows,
+      boardCols,
     };
   },
 
@@ -34,7 +40,7 @@ export const TriangleGame: Game<TriangleGameState> = {
   endIf: ({ G, ctx }) => {
     const { capturedCells, stagedCells, fillableGroup } = G;
     const totalCaptured = Object.keys(capturedCells).length;
-    const totalTriangles = (BOARD_ROWS - 2) * (BOARD_COLS - 2);
+    const totalTriangles = (G.boardRows - 2) * (G.boardCols - 2);
 
     if (
       totalTriangles >
@@ -83,4 +89,4 @@ export const TriangleGame: Game<TriangleGameState> = {
       },
     },
   },
-};
+});
