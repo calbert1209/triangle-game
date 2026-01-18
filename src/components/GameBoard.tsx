@@ -4,6 +4,7 @@ import { COLOR_MAP, getCellColorHex } from "../models/colors";
 import { findEdgeCells } from "../models/fillableGroup";
 import { useCallback, useMemo } from "preact/hooks";
 import { useGameContext } from "./GameContext";
+import { TRIANGLE_SIZE, X_OFFSET, Y_OFFSET } from "../models/constants";
 
 export const GameBoard = () => {
   const { G, ctx, moves, triangles } = useGameContext();
@@ -33,10 +34,10 @@ export const GameBoard = () => {
   const newViewBox = useMemo(() => {
     const maxRow = G.boardRows - 2;
     const maxCol = G.boardCols - 2;
-    const minX = 15;
-    const minY = -60;
-    const maxX = maxCol * 25 + 15 + 79; // col position + offset + triangle width
-    const maxY = maxRow * 42 - 60 + 79; // row position + offset + triangle height
+    const minX = X_OFFSET;
+    const minY = Y_OFFSET;
+    const maxX = maxCol * 25 + X_OFFSET + TRIANGLE_SIZE; // col position + offset + triangle width
+    const maxY = maxRow * 42 + Y_OFFSET + TRIANGLE_SIZE; // row position + offset + triangle height
     const width = maxX - minX;
     const height = maxY - minY;
     return `${minX} ${minY} ${width} ${height}`;
