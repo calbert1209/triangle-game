@@ -6,14 +6,17 @@ import { COLOR_MAP, getCellColorHex } from "../models/colors";
 import { findEdgeCells } from "../models/fillableGroup";
 import { useCallback, useMemo } from "preact/hooks";
 import { BOARD_COLS, BOARD_ROWS } from "../models/constants";
+import { useGameContext } from "./GameContext";
 
-interface Props extends BoardProps<TriangleGameState> {
+interface Props {
   triangles: Array<Triangle>;
 }
 
 const edgeCells = findEdgeCells();
 
-export const GameBoard = ({ G, ctx, triangles, moves }: Props) => {
+export const GameBoard = ({ triangles }: Props) => {
+  const { G, ctx, moves } = useGameContext();
+
   const onClick = useCallback((id: TriangleId) => {
     if (edgeCells.has(id)) return;
 
