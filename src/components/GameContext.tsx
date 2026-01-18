@@ -1,15 +1,33 @@
 import { BoardProps } from "boardgame.io/dist/types/packages/react";
 import { TriangleGameState } from "../models/Game";
 import { ComponentChildren, createContext } from "preact";
-import { useContext } from "preact/hooks";
+import { useContext, useMemo } from "preact/hooks";
+import { createTriangle, Triangle } from "../models/Triangle";
 
-const GameContext = createContext<BoardProps<TriangleGameState> | null>(null);
+interface GameContext extends BoardProps<TriangleGameState> {
+  triangles: Triangle[];
+}
+
+const GameContext = createContext<GameContext | null>(null);
 
 export const GameContextProvider = ({
   children,
   ...props
 }: BoardProps<TriangleGameState> & { children: ComponentChildren }) => {
-  return <GameContext.Provider value={props}>{children}</GameContext.Provider>;
+  const triangles = useMemo(
+    () =>
+      Array.from({ length: props.G.boardRows }).flatMap((_, row) =>
+        Array.from({ length: props.G.boardCols }).map((_, col) => {
+          return createTriangle(row, col, props.G.boardRows, props.G.boardCols);
+        }),
+      ),
+    [],
+  );
+  return (
+    <GameContext.Provider value={{ ...props, triangles }}>
+      {children}
+    </GameContext.Provider>
+  );
 };
 
 export const useGameContext = () => {

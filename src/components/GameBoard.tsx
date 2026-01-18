@@ -4,11 +4,9 @@ import { COLOR_MAP, getCellColorHex } from "../models/colors";
 import { findEdgeCells } from "../models/fillableGroup";
 import { useCallback, useMemo } from "preact/hooks";
 import { useGameContext } from "./GameContext";
-import { useTrianglesContext } from "./TrianglesContext";
 
 export const GameBoard = () => {
-  const { G, ctx, moves } = useGameContext();
-  const { triangles } = useTrianglesContext();
+  const { G, ctx, moves, triangles } = useGameContext();
 
   const edgeCells = useMemo(() => {
     return findEdgeCells(G.boardRows, G.boardCols);
