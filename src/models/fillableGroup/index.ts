@@ -4,8 +4,8 @@ import { createTriangleFromId, TriangleId } from "../Triangle";
 
 const iterateThroughBoardCells = (
   cb: (r: number, c: number) => void,
-  rows = BOARD_ROWS,
-  cols = BOARD_COLS
+  rows: number,
+  cols: number,
 ) => {
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
@@ -14,10 +14,7 @@ const iterateThroughBoardCells = (
   }
 };
 
-export const findEdgeCells = (
-  rows = BOARD_ROWS,
-  cols = BOARD_COLS
-): Set<TriangleId> => {
+export const findEdgeCells = (rows: number, cols: number): Set<TriangleId> => {
   const edgeCells = new Set<TriangleId>();
   iterateThroughBoardCells(
     (r, c) => {
@@ -27,7 +24,7 @@ export const findEdgeCells = (
       }
     },
     rows,
-    cols
+    cols,
   );
   return edgeCells;
 };
@@ -35,8 +32,8 @@ export const findEdgeCells = (
 export const findOutsideCells = (
   capturedCells: TriangleGameState["capturedCells"],
   playerId: number,
-  rows = BOARD_ROWS,
-  cols = BOARD_COLS
+  rows: number,
+  cols: number,
 ): Set<TriangleId> => {
   const outsideCells = new Set<TriangleId>();
   const visitedCells = new Set<TriangleId>();
@@ -76,8 +73,8 @@ export const findOutsideCells = (
 export const findFillableGroup = (
   capturedCells: TriangleGameState["capturedCells"],
   playerId: number,
-  rows = BOARD_ROWS,
-  cols = BOARD_COLS
+  rows: number,
+  cols: number,
 ): Set<TriangleId> => {
   const outsideCells = findOutsideCells(capturedCells, playerId, rows, cols);
   const enclosedCells = new Set<TriangleId>();
@@ -89,7 +86,7 @@ export const findFillableGroup = (
       }
     },
     rows,
-    cols
+    cols,
   );
   return enclosedCells;
 };

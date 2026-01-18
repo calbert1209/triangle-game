@@ -30,7 +30,7 @@ export const TriangleContextProvider = ({
     () =>
       Array.from({ length: BOARD_ROWS }).flatMap((_, row) =>
         Array.from({ length: BOARD_COLS }).map((_, col) => {
-          return createTriangle(row, col);
+          return createTriangle(row, col, BOARD_ROWS, BOARD_COLS);
         })
       ),
     []
