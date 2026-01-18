@@ -16,7 +16,7 @@ export const GameBoard = () => {
   const onClick = useCallback((id: TriangleId) => {
     if (edgeCells.has(id)) return;
 
-    moves.pickCell(id, G.boardRows, G.boardCols);
+    moves.pickCell(id);
     // TODO: deal with changes to edgeCells.
   }, []);
 
